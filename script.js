@@ -1,50 +1,34 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
     const addButton = document.getElementById('add-task-btn');
     const taskInput = document.getElementById('task-input');
     const taskList = document.getElementById('task-list');
 
-    function createTaskElement(taskText) {
-        const li = document.createElement('li');
-
-        const textSpan = document.createElement('span');
-        textSpan.textContent = taskText;
-        li.appendChild(textSpan);
-
-        const removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.className = 'remove-btn';
-        removeButton.textContent = 'Remove';
-        removeButton.setAttribute('aria-label', `Remove task: ${taskText}`);
-
-        removeButton.addEventListener('click', () => {
-            li.remove();
-        });
-
-        li.appendChild(removeButton);
-        return li;
-    }
-
     function addTask() {
         const taskText = taskInput.value.trim();
-        if (!taskText) {
-            alert('Please enter a task!');
+        if (taskText === "") {
+            alert("Please enter a task!");
             return;
         }
 
-        const taskItem = createTaskElement(taskText);
-        taskList.appendChild(taskItem);
+        const li = document.createElement('li');
+        li.textContent = taskText;
 
-        taskInput.value = '';
-        taskInput.focus();
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.classList.add('remove-btn'); // 
+
+        removeButton.onclick = function () {
+            taskList.removeChild(li);
+        };
+
+        li.appendChild(removeButton);
+        taskList.appendChild(li);
+        taskInput.value = "";
     }
 
-
     addButton.addEventListener('click', addTask);
-
-
-    taskInput.addEventListener('keydown', (event) => {
+    taskInput.addEventListener('keypress', function (event) {
         if (event.key === 'Enter') {
-            event.preventDefault();
             addTask();
         }
     });
